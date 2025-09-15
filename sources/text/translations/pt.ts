@@ -84,6 +84,8 @@ export const pt: TranslationStructure = {
         voiceAssistantSubtitle: 'Configure as preferências de interação por voz',
         featuresTitle: 'Recursos',
         featuresSubtitle: 'Ativar ou desativar recursos do aplicativo',
+        tokenUsageDashboard: 'Painel de uso de tokens',
+        tokenUsageDashboardSubtitle: 'Visualizar estatísticas detalhadas e tendências de uso de tokens',
         developer: 'Desenvolvedor',
         developerTools: 'Ferramentas de desenvolvedor',
         about: 'Sobre',
@@ -164,6 +166,18 @@ export const pt: TranslationStructure = {
         commandPaletteDisabled: 'Acesso rápido a comandos desativado',
         markdownCopyV2: 'Markdown Copy v2',
         markdownCopyV2Subtitle: 'Pressione e segure para abrir modal de cópia',
+        gitFeatures: 'Recursos Git',
+        gitFeaturesDescription: 'Configure como o Happy Coder interage com repositórios Git.',
+        disableCopyrightAttribution: 'Desabilitar Atribuição de Direitos Autorais',
+        disableCopyrightAttributionSubtitle: 'Remover atribuição Happy/Claude de mensagens de commit',
+        voiceFeatures: 'Recursos de Voz',
+        voiceFeaturesDescription: 'Configure as configurações do assistente de voz com suas próprias credenciais da ElevenLabs.',
+        elevenLabsApiKey: 'Chave API da ElevenLabs',
+        elevenLabsApiKeySubtitle: 'Sua chave API personalizada da ElevenLabs para sessões de voz.',
+        elevenLabsApiKeyPlaceholder: 'Digite a chave API...',
+        elevenLabsAgentId: 'ID do Agente ElevenLabs',
+        elevenLabsAgentIdSubtitle: 'Seu ID de agente personalizado da ElevenLabs para sessões de voz.',
+        elevenLabsAgentIdPlaceholder: 'Digite o ID do agente...',
     },
 
     errors: {
@@ -655,6 +669,14 @@ export const pt: TranslationStructure = {
         unknownEvent: 'Evento desconhecido',
         usageLimitUntil: ({ time }: { time: string }) => `Limite de uso atingido até ${time}`,
         unknownTime: 'horário desconhecido',
+        retrying: {
+            single: 'Tentando enviar mensagem novamente...',
+            multiple: ({ count }: { count: number }) => `Tentando enviar ${count} mensagens novamente...`,
+        },
+        failed: {
+            single: 'Falha ao enviar mensagem',
+            multiple: ({ count }: { count: number }) => `Falha ao enviar ${count} mensagens`,
+        },
     },
 
     codex: {

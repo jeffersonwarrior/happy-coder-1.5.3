@@ -8,6 +8,9 @@ export interface VoiceSession {
     endSession(): Promise<void>;
     sendTextMessage(message: string): void;
     sendContextualUpdate(update: string): void;
+    mute(): void;
+    unmute(): void;
+    isMuted(): boolean;
 }
 
 export type ConversationStatus = 'disconnected' | 'connecting' | 'connected';

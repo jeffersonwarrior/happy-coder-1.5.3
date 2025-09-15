@@ -95,6 +95,8 @@ export const pl: TranslationStructure = {
         voiceAssistantSubtitle: 'Konfiguruj preferencje interakcji głosowej',
         featuresTitle: 'Funkcje',
         featuresSubtitle: 'Włącz lub wyłącz funkcje aplikacji',
+        tokenUsageDashboard: 'Panel użycia tokenów',
+        tokenUsageDashboardSubtitle: 'Wyświetl szczegółowe statystyki i trendy użycia tokenów',
         developer: 'Deweloper',
         developerTools: 'Narzędzia deweloperskie',
         about: 'O aplikacji',
@@ -175,6 +177,18 @@ export const pl: TranslationStructure = {
         commandPaletteDisabled: 'Szybki dostęp do poleceń wyłączony',
         markdownCopyV2: 'Markdown Copy v2',
         markdownCopyV2Subtitle: 'Długie naciśnięcie otwiera modal kopiowania',
+        gitFeatures: 'Funkcje Git',
+        gitFeaturesDescription: 'Skonfiguruj sposób interakcji Happy Coder z repozytoriami Git.',
+        disableCopyrightAttribution: 'Wyłącz atrybucję praw autorskich',
+        disableCopyrightAttributionSubtitle: 'Usuń atrybucję Happy/Claude z wiadomości commit',
+        voiceFeatures: 'Funkcje głosowe',
+        voiceFeaturesDescription: 'Skonfiguruj ustawienia asystenta głosowego z własnymi danymi uwierzytelniającymi ElevenLabs.',
+        elevenLabsApiKey: 'Klucz API ElevenLabs',
+        elevenLabsApiKeySubtitle: 'Twój niestandardowy klucz API ElevenLabs dla sesji głosowych.',
+        elevenLabsApiKeyPlaceholder: 'Wprowadź klucz API...',
+        elevenLabsAgentId: 'ID Agenta ElevenLabs',
+        elevenLabsAgentIdSubtitle: 'Twój niestandardowy ID agenta ElevenLabs dla sesji głosowych.',
+        elevenLabsAgentIdPlaceholder: 'Wprowadź ID agenta...',
     },
 
     errors: {
@@ -665,6 +679,14 @@ export const pl: TranslationStructure = {
         unknownEvent: 'Nieznane zdarzenie',
         usageLimitUntil: ({ time }: { time: string }) => `Osiągnięto limit użycia do ${time}`,
         unknownTime: 'nieznany czas',
+        retrying: {
+            single: 'Ponowne wysyłanie wiadomości...',
+            multiple: ({ count }: { count: number }) => `Ponowne wysyłanie ${count} ${plural({ count, one: 'wiadomości', few: 'wiadomości', many: 'wiadomości' })}...`,
+        },
+        failed: {
+            single: 'Nie udało się wysłać wiadomości',
+            multiple: ({ count }: { count: number }) => `Nie udało się wysłać ${count} ${plural({ count, one: 'wiadomości', few: 'wiadomości', many: 'wiadomości' })}`,
+        },
     },
 
     codex: {

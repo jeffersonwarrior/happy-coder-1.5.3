@@ -25,6 +25,9 @@ export const SettingsSchema = z.object({
         path: z.string()
     })).describe('Last 10 machine-path combinations, ordered by most recent first'),
     lastUsedAgent: z.string().nullable().describe('Last selected agent type for new sessions'),
+    disableCopyrightAttribution: z.boolean().describe('Whether to disable copyright attribution in commit messages'),
+    elevenLabsApiKey: z.string().nullish().describe('Custom ElevenLabs API key for voice sessions'),
+    elevenLabsAgentId: z.string().nullish().describe('Custom ElevenLabs agent ID for voice sessions'),
 });
 
 //
@@ -64,6 +67,9 @@ export const settingsDefaults: Settings = {
     preferredLanguage: null,
     recentMachinePaths: [],
     lastUsedAgent: null,
+    disableCopyrightAttribution: false,
+    elevenLabsApiKey: null,
+    elevenLabsAgentId: null,
 };
 Object.freeze(settingsDefaults);
 

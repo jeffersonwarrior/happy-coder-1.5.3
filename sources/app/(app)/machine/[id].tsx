@@ -11,7 +11,7 @@ import type { Session } from '@/sync/storageTypes';
 import { machineStopDaemon, machineUpdateMetadata } from '@/sync/ops';
 import { Modal } from '@/modal';
 import { formatPathRelativeToHome, getSessionName, getSessionSubtitle } from '@/utils/sessionUtils';
-import { isMachineOnline } from '@/utils/machineUtils';
+import { isMachineOnline, getMachineConnectionState } from '@/utils/machineUtils';
 import { sync } from '@/sync/sync';
 import { useUnistyles, StyleSheet } from 'react-native-unistyles';
 import { t } from '@/text';
@@ -109,7 +109,13 @@ export default function MachineDetailScreen() {
         return recentPaths.slice(0, 5);
     }, [recentPaths, showAllPaths]);
 
-    // Determine daemon status from metadata
+    // Enhanced connection state
+    const connectionState = useMemo(() => {
+        if (!machine) return null;
+        return getMachineConnectionState(machine);
+    }, [machine]);
+
+    // Determine daemon status from metadata and connection health
     const daemonStatus = useMemo(() => {
         if (!machine) return 'unknown';
 
@@ -119,9 +125,18 @@ export default function MachineDetailScreen() {
             return 'stopped';
         }
 
-        // Use machine online status as proxy for daemon status
+        // Use enhanced connection state
+        if (connectionState) {
+            if (connectionState.isOnline) {
+                return connectionState.lastVerified > 0 ? 'verified online' : 'likely alive';
+            } else {
+                return connectionState.status === 'offline' ? 'confirmed offline' : 'stopped';
+            }
+        }
+
+        // Fallback to basic online check
         return isMachineOnline(machine) ? 'likely alive' : 'stopped';
-    }, [machine]);
+    }, [machine, connectionState]);
 
     const handleStopDaemon = async () => {
         // Show confirmation modal using alert with buttons
@@ -208,7 +223,7 @@ export default function MachineDetailScreen() {
         if (!machine || !machineId) return;
         try {
             const pathToUse = (customPath.trim() || '~');
-            if (!isMachineOnline(machine)) return;
+            if (!(connectionState?.isOnline ?? false)) return;
             setIsSpawning(true);
             const absolutePath = resolveAbsolutePath(pathToUse, machine?.metadata?.homeDir);
             const result = await machineSpawnNewSession({
@@ -272,7 +287,7 @@ export default function MachineDetailScreen() {
     const metadata = machine.metadata;
     const machineName = metadata?.displayName || metadata?.host || 'unknown machine';
 
-    const spawnButtonDisabled = !customPath.trim() || isSpawning || !isMachineOnline(machine!);
+    const spawnButtonDisabled = !customPath.trim() || isSpawning || !(connectionState?.isOnline ?? false);
 
     return (
         <>
@@ -297,14 +312,14 @@ export default function MachineDetailScreen() {
                                     width: 6,
                                     height: 6,
                                     borderRadius: 3,
-                                    backgroundColor: isMachineOnline(machine) ? '#34C759' : '#999',
+                                    backgroundColor: connectionState?.isOnline ? '#34C759' : '#999',
                                     marginRight: 4
                                 }} />
                                 <Text style={[Typography.default(), {
                                     fontSize: 12,
-                                    color: isMachineOnline(machine) ? '#34C759' : '#999'
+                                    color: connectionState?.isOnline ? '#34C759' : '#999'
                                 }]}>
-                                    {isMachineOnline(machine) ? t('status.online') : t('status.offline')}
+                                    {connectionState?.isOnline ? t('status.online') : t('status.offline')}
                                 </Text>
                             </View>
                         </View>
@@ -340,7 +355,7 @@ export default function MachineDetailScreen() {
                 {/* Launch section */}
                 {machine && (
                     <>
-                        {!isMachineOnline(machine) && (
+                        {!(connectionState?.isOnline ?? false) && (
                             <ItemGroup>
                                 <Item
                                     title={t('machine.offlineUnableToSpawn')}
@@ -351,7 +366,7 @@ export default function MachineDetailScreen() {
                             </ItemGroup>
                         )}
                         <ItemGroup title={t('machine.launchNewSessionInDirectory')}>
-                        <View style={{ opacity: isMachineOnline(machine) ? 1 : 0.5 }}>
+                        <View style={{ opacity: (connectionState?.isOnline ?? false) ? 1 : 0.5 }}>
                             <View style={styles.pathInputContainer}>
                                 <View style={[styles.pathInput, { paddingVertical: 8 }]}>
                                     <MultiTextInput
@@ -392,11 +407,11 @@ export default function MachineDetailScreen() {
                                         key={path}
                                         title={display}
                                         leftElement={<Ionicons name="folder-outline" size={18} color={theme.colors.textSecondary} />}
-                                        onPress={isMachineOnline(machine) ? () => {
+                                        onPress={(connectionState?.isOnline ?? false) ? () => {
                                             setCustomPath(display);
                                             setTimeout(() => inputRef.current?.focus(), 50);
                                         } : undefined}
-                                        disabled={!isMachineOnline(machine)}
+                                        disabled={!(connectionState?.isOnline ?? false)}
                                         selected={isSelected}
                                         showChevron={false}
                                         pressableStyle={isSelected ? { backgroundColor: theme.colors.surfaceSelected } : undefined}

@@ -10,6 +10,7 @@ import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { layout } from '@/components/layout';
 import { t } from '@/text';
 import { MultiTextInput, MultiTextInputHandle } from '@/components/MultiTextInput';
+import { PathTextInput } from '@/components/PathTextInput';
 import { callbacks } from '../index';
 
 const stylesheet = StyleSheet.create((theme) => ({
@@ -200,17 +201,15 @@ export default function PathPickerScreen() {
                         <ItemGroup title="Enter Path">
                             <View style={styles.pathInputContainer}>
                                 <View style={[styles.pathInput, { paddingVertical: 8 }]}>
-                                    <MultiTextInput
+                                    <PathTextInput
                                         ref={inputRef}
                                         value={customPath}
                                         onChangeText={setCustomPath}
                                         placeholder="Enter path (e.g. /home/user/projects)"
+                                        sessionId={params.machineId}
                                         maxHeight={76}
                                         paddingTop={8}
                                         paddingBottom={8}
-                                        // onSubmitEditing={handleSelectPath}
-                                        // blurOnSubmit={true}
-                                        // returnKeyType="done"
                                     />
                                 </View>
                             </View>

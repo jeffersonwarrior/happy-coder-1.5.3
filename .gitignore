@@ -43,3 +43,11 @@ yarn-error.*
 .plan
 
 CLAUDE.local.md
+
+# Task management files
+currenttasks.md
+futuretasks.md
+
+# Testing documentation
+automatedtesting.md
+test-new-features.sh

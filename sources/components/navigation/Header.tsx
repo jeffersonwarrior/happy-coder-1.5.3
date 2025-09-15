@@ -91,13 +91,15 @@ interface ExtendedNavigationOptions extends Partial<NativeStackHeaderProps['opti
 }
 
 // Default back button component
-const DefaultBackButton: React.FC<{ tintColor?: string; onPress: () => void }> = ({ tintColor = '#000', onPress }) => {
+const DefaultBackButton: React.FC<{ tintColor?: string; onPress: () => void }> = ({ tintColor, onPress }) => {
+    const styles = stylesheet;
     return (
         <Pressable onPress={onPress} hitSlop={15}>
             <Ionicons
                 name={Platform.OS === 'ios' ? 'chevron-back' : 'arrow-back'}
                 size={24}
-                color={tintColor}
+                color={tintColor || styles.backButton.color}
+                style={styles.backButton}
             />
         </Pressable>
     );

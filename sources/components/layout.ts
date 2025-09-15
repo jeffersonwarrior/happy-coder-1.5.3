@@ -31,7 +31,7 @@ function getMaxLayoutWidth(): number {
     }
 
     if (isRunningOnMac()) {
-        return 1400;
+        return 700; // Reduced from 1400 to prevent oversized UI elements
     }
     
     // For tablets and web, use 700px

@@ -11,6 +11,7 @@ let conversationInstance: ReturnType<typeof useConversation> | null = null;
 
 // Global voice session implementation
 class RealtimeVoiceSessionImpl implements VoiceSession {
+    private _isMuted: boolean = false;
 
     async startSession(config: VoiceSessionConfig): Promise<void> {
         if (!conversationInstance) {
@@ -35,9 +36,14 @@ class RealtimeVoiceSessionImpl implements VoiceSession {
             const userLanguagePreference = storage.getState().settings.voiceAssistantLanguage;
             const elevenLabsLanguage = getElevenLabsCodeFromPreference(userLanguagePreference);
             
-            // Use hardcoded agent ID for Eleven Labs
-            const conversationId = await conversationInstance.startSession({
-                agentId: __DEV__ ? 'agent_7801k2c0r5hjfraa1kdbytpvs6yt' : 'agent_6701k211syvvegba4kt7m68nxjmw',
+            // Use custom agent ID if configured, otherwise use hardcoded default
+            const customAgentId = storage.getState().settings.elevenLabsAgentId;
+            const customApiKey = storage.getState().settings.elevenLabsApiKey;
+            const defaultAgentId = __DEV__ ? 'agent_7801k2c0r5hjfraa1kdbytpvs6yt' : 'agent_6701k211syvvegba4kt7m68nxjmw';
+
+            // If custom API key is provided, generate conversation token for private agents
+            let sessionConfig: any = {
+                agentId: customAgentId || defaultAgentId,
                 connectionType: 'webrtc', // Use WebRTC for better performance
                 // Pass session ID and initial context as dynamic variables
                 dynamicVariables: {
@@ -49,7 +55,34 @@ class RealtimeVoiceSessionImpl implements VoiceSession {
                         language: elevenLabsLanguage
                     }
                 }
-            });
+            };
+
+            // If custom API key is provided, we need to generate a conversation token
+            if (customApiKey && customAgentId) {
+                try {
+                    const response = await fetch(
+                        `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${customAgentId}`,
+                        {
+                            headers: {
+                                'xi-api-key': customApiKey,
+                            }
+                        }
+                    );
+
+                    if (response.ok) {
+                        const body = await response.json();
+                        sessionConfig.conversationToken = body.token;
+                        // Remove agentId when using conversation token
+                        delete sessionConfig.agentId;
+                    } else {
+                        console.error('Failed to generate conversation token:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Error generating conversation token:', error);
+                }
+            }
+
+            const conversationId = await conversationInstance.startSession(sessionConfig);
 
             console.log('Started conversation with ID:', conversationId);
         } catch (error) {
@@ -87,6 +120,32 @@ class RealtimeVoiceSessionImpl implements VoiceSession {
         }
 
         conversationInstance.sendContextualUpdate(update);
+    }
+
+    mute(): void {
+        try {
+            this._isMuted = true;
+            // For now, we just track mute state internally
+            // Future: integrate with ElevenLabs mute API when available
+            console.log('Voice session muted');
+        } catch (error) {
+            console.error('Failed to mute voice session:', error);
+        }
+    }
+
+    unmute(): void {
+        try {
+            this._isMuted = false;
+            // For now, we just track mute state internally
+            // Future: integrate with ElevenLabs mute API when available
+            console.log('Voice session unmuted');
+        } catch (error) {
+            console.error('Failed to unmute voice session:', error);
+        }
+    }
+
+    isMuted(): boolean {
+        return this._isMuted;
     }
 }
 

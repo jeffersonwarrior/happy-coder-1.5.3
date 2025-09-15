@@ -5,12 +5,16 @@ import { ItemGroup } from '@/components/ItemGroup';
 import { ItemList } from '@/components/ItemList';
 import { useSettingMutable, useLocalSettingMutable } from '@/sync/storage';
 import { Switch } from '@/components/Switch';
+import { MultiTextInput } from '@/components/MultiTextInput';
 import { t } from '@/text';
 
 export default function FeaturesSettingsScreen() {
     const [experiments, setExperiments] = useSettingMutable('experiments');
     const [commandPaletteEnabled, setCommandPaletteEnabled] = useLocalSettingMutable('commandPaletteEnabled');
     const [markdownCopyV2, setMarkdownCopyV2] = useLocalSettingMutable('markdownCopyV2');
+    const [disableCopyrightAttribution, setDisableCopyrightAttribution] = useSettingMutable('disableCopyrightAttribution');
+    const [elevenLabsApiKey, setElevenLabsApiKey] = useSettingMutable('elevenLabsApiKey');
+    const [elevenLabsAgentId, setElevenLabsAgentId] = useSettingMutable('elevenLabsAgentId');
     
     return (
         <ItemList style={{ paddingTop: 0 }}>
@@ -65,6 +69,58 @@ export default function FeaturesSettingsScreen() {
                     />
                 </ItemGroup>
             )}
+
+            {/* Git Features */}
+            <ItemGroup
+                title={t('settingsFeatures.gitFeatures')}
+                footer={t('settingsFeatures.gitFeaturesDescription')}
+            >
+                <Item
+                    title={t('settingsFeatures.disableCopyrightAttribution')}
+                    subtitle={t('settingsFeatures.disableCopyrightAttributionSubtitle')}
+                    icon={<Ionicons name="git-commit-outline" size={29} color="#FF6B35" />}
+                    rightElement={
+                        <Switch
+                            value={disableCopyrightAttribution}
+                            onValueChange={setDisableCopyrightAttribution}
+                        />
+                    }
+                    showChevron={false}
+                />
+            </ItemGroup>
+
+            {/* Voice Features */}
+            <ItemGroup
+                title={t('settingsFeatures.voiceFeatures')}
+                footer={t('settingsFeatures.voiceFeaturesDescription')}
+            >
+                <Item
+                    title={t('settingsFeatures.elevenLabsApiKey')}
+                    subtitle={t('settingsFeatures.elevenLabsApiKeySubtitle')}
+                    icon={<Ionicons name="key-outline" size={29} color="#FF9500" />}
+                    rightElement={
+                        <MultiTextInput
+                            value={elevenLabsApiKey || ''}
+                            onChangeText={setElevenLabsApiKey}
+                            placeholder={t('settingsFeatures.elevenLabsApiKeyPlaceholder')}
+                        />
+                    }
+                    showChevron={false}
+                />
+                <Item
+                    title={t('settingsFeatures.elevenLabsAgentId')}
+                    subtitle={t('settingsFeatures.elevenLabsAgentIdSubtitle')}
+                    icon={<Ionicons name="person-outline" size={29} color="#FF9500" />}
+                    rightElement={
+                        <MultiTextInput
+                            value={elevenLabsAgentId || ''}
+                            onChangeText={setElevenLabsAgentId}
+                            placeholder={t('settingsFeatures.elevenLabsAgentIdPlaceholder')}
+                        />
+                    }
+                    showChevron={false}
+                />
+            </ItemGroup>
         </ItemList>
     );
 }

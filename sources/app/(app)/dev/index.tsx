@@ -170,6 +170,12 @@ export default function DevScreen() {
                     icon={<Ionicons name="document-text-outline" size={28} color="#007AFF" />}
                     onPress={() => router.push('/dev/logs')}
                 />
+                <Item
+                    title="Connection Health"
+                    subtitle="Debug connection status and machine health"
+                    icon={<Ionicons name="pulse-outline" size={28} color="#34C759" />}
+                    onPress={() => router.push('/dev/connection-health')}
+                />
             </ItemGroup>
 
             {/* Component Demos */}

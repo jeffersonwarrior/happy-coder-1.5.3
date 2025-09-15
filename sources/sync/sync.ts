@@ -30,6 +30,8 @@ import { voiceHooks } from '@/realtime/hooks/voiceHooks';
 import { Message } from './typesMessage';
 import { EncryptionCache } from './encryption/encryptionCache';
 import { systemPrompt } from './prompt/systemPrompt';
+import { connectionHealth } from './connectionHealth';
+import { reliableMessaging } from './reliableMessaging';
 
 class Sync {
 
@@ -122,6 +124,12 @@ class Sync {
         // Subscribe to updates
         this.subscribeToUpdates();
 
+        // Start connection health monitoring
+        connectionHealth.start();
+
+        // Start reliable messaging system
+        reliableMessaging.start();
+
         // Sync initial PostHog opt-out state with stored settings
         if (tracking) {
             const currentSettings = storage.getState().settings;
@@ -173,6 +181,21 @@ class Sync {
 
 
     async sendMessage(sessionId: string, text: string) {
+        // Use reliable messaging system for better connection handling
+        const result = await reliableMessaging.sendMessage(sessionId, text, {
+            validateConnection: true,
+            maxRetries: 2,
+            timeout: 15000
+        });
+
+        if (!result.success && result.error) {
+            console.error(`Failed to send message: ${result.error}`);
+            throw new Error(result.error);
+        }
+    }
+
+    // Original send message method (used internally by reliable messaging)
+    async sendMessageDirect(sessionId: string, text: string) {
 
         // Get encryption
         const encryption = this.encryption.getSessionEncryption(sessionId);
@@ -962,6 +985,8 @@ class Sync {
         // Subscribe to connection state changes
         apiSocket.onReconnected(() => {
             log.log('🔌 Socket reconnected');
+
+            // Invalidate all sync operations
             this.sessionsSync.invalidate();
             this.machinesSync.invalidate();
             const sessionsData = storage.getState().sessionsData;
@@ -971,9 +996,15 @@ class Sync {
                         this.messagesSync.get(item.id)?.invalidate();
                         // Also invalidate git status on reconnection
                         gitStatusSync.invalidate(item.id);
+
+                        // Retry failed messages for this session
+                        reliableMessaging.retryFailedMessages(item.id);
                     }
                 }
             }
+
+            // Force refresh connection health status
+            connectionHealth.forceRefresh();
         });
     }
 

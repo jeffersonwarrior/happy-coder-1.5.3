@@ -7,7 +7,7 @@ import { Item } from '@/components/Item';
 import { ItemGroup } from '@/components/ItemGroup';
 import { ItemList } from '@/components/ItemList';
 import { Avatar } from '@/components/Avatar';
-import { useSession } from '@/sync/storage';
+import { useSession, useSessionUsage } from '@/sync/storage';
 import { getSessionName, useSessionStatus, formatOSPlatform, formatPathRelativeToHome, getSessionAvatarId } from '@/utils/sessionUtils';
 import * as Clipboard from 'expo-clipboard';
 import { Modal } from '@/modal';
@@ -17,6 +17,7 @@ import { layout } from '@/components/layout';
 import { t } from '@/text';
 import { isVersionSupported, MINIMUM_CLI_VERSION } from '@/utils/versionUtils';
 import { CodeView } from '@/components/CodeView';
+import { StatuslineMetrics } from '@/components/StatuslineMetrics';
 
 // Animated status dot component
 function StatusDot({ color, isPulsing, size = 8 }: { color: string; isPulsing?: boolean; size?: number }) {
@@ -127,6 +128,7 @@ export default React.memo(() => {
 
     const sessionName = getSessionName(session);
     const sessionStatus = useSessionStatus(session);
+    const sessionUsage = useSessionUsage(session.id);
 
     // Check if CLI version is outdated
     const isCliOutdated = session.metadata?.version && !isVersionSupported(session.metadata.version, MINIMUM_CLI_VERSION);
@@ -359,6 +361,18 @@ export default React.memo(() => {
                         />
                     )}
                 </ItemGroup>
+
+                {/* Usage Metrics */}
+                {sessionUsage && (
+                    <ItemGroup title={t('sessionInfo.usageMetrics')}>
+                        <View style={{ padding: 16 }}>
+                            <StatuslineMetrics
+                                usage={sessionUsage}
+                                variant="detailed"
+                            />
+                        </View>
+                    </ItemGroup>
+                )}
 
                 {/* Raw JSON (Dev Mode Only) */}
                 {devModeEnabled && (

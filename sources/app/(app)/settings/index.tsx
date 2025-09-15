@@ -393,6 +393,12 @@ export default React.memo(function SettingsScreen() {
                     icon={<Ionicons name="flask-outline" size={29} color="#FF9500" />}
                     onPress={() => router.push('/settings/features')}
                 />
+                <Item
+                    title={t('settings.tokenUsageDashboard')}
+                    subtitle={t('settings.tokenUsageDashboardSubtitle')}
+                    icon={<Ionicons name="analytics-outline" size={29} color="#32D74B" />}
+                    onPress={() => router.push('/dashboard/usage')}
+                />
             </ItemGroup>
 
             {/* Developer */}

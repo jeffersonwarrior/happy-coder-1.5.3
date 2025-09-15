@@ -84,6 +84,8 @@ export const en = {
         voiceAssistantSubtitle: 'Configure voice interaction preferences',
         featuresTitle: 'Features',
         featuresSubtitle: 'Enable or disable app features',
+        tokenUsageDashboard: 'Token Usage Dashboard',
+        tokenUsageDashboardSubtitle: 'View detailed token usage statistics and trends',
         developer: 'Developer',
         developerTools: 'Developer Tools',
         about: 'About',
@@ -164,6 +166,18 @@ export const en = {
         commandPaletteDisabled: 'Quick command access disabled',
         markdownCopyV2: 'Markdown Copy v2',
         markdownCopyV2Subtitle: 'Long press opens copy modal',
+        gitFeatures: 'Git Features',
+        gitFeaturesDescription: 'Configure how Happy Coder interacts with Git repositories.',
+        disableCopyrightAttribution: 'Disable Copyright Attribution',
+        disableCopyrightAttributionSubtitle: 'Remove Happy/Claude attribution from commit messages',
+        voiceFeatures: 'Voice Features',
+        voiceFeaturesDescription: 'Configure voice assistant settings with your own ElevenLabs credentials.',
+        elevenLabsApiKey: 'ElevenLabs API Key',
+        elevenLabsApiKeySubtitle: 'Your custom ElevenLabs API key for voice sessions.',
+        elevenLabsApiKeyPlaceholder: 'Enter API key...',
+        elevenLabsAgentId: 'ElevenLabs Agent ID',
+        elevenLabsAgentIdSubtitle: 'Your custom ElevenLabs agent ID for voice sessions.',
+        elevenLabsAgentIdPlaceholder: 'Enter agent ID...',
     },
 
     errors: {
@@ -302,7 +316,8 @@ export const en = {
         cliVersionOutdatedMessage: ({ currentVersion, requiredVersion }: { currentVersion: string; requiredVersion: string }) =>
             `Version ${currentVersion} installed. Update to ${requiredVersion} or later`,
         updateCliInstructions: 'Please run npm install -g happy-coder@latest',
-        
+        usageMetrics: 'Usage Metrics',
+
     },
 
     components: {
@@ -568,6 +583,13 @@ export const en = {
         clientSideProcessing: 'Client-Side Processing',
         linkProcessedLocally: 'Link processed locally in browser',
         linkProcessedOnDevice: 'Link processed locally on device',
+        // Auth status messages
+        invalidAuthUrl: 'Invalid authentication URL',
+        processingRequest: 'Processing authentication request...',
+        encryptingCredentials: 'Encrypting credentials securely...',
+        establishingConnection: 'Establishing secure connection...',
+        connectionSuccess: 'Connection established successfully',
+        connectionFailed: 'Failed to establish connection',
     },
 
     modals: {
@@ -655,6 +677,14 @@ export const en = {
         unknownEvent: 'Unknown event',
         usageLimitUntil: ({ time }: { time: string }) => `Usage limit reached until ${time}`,
         unknownTime: 'unknown time',
+        retrying: {
+            single: 'Retrying message...',
+            multiple: ({ count }: { count: number }) => `Retrying ${count} messages...`,
+        },
+        failed: {
+            single: 'Message failed to send',
+            multiple: ({ count }: { count: number }) => `${count} messages failed to send`,
+        },
     },
 
     codex: {

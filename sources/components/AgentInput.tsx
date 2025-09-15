@@ -22,6 +22,7 @@ import { useSetting } from '@/sync/storage';
 import { Theme } from '@/theme';
 import { t } from '@/text';
 import { Metadata } from '@/sync/storageTypes';
+import { getDetectedModelModes, getEnhancedModelConfig } from '@/utils/modelDetection';
 
 interface AgentInputProps {
     value: string;
@@ -294,6 +295,15 @@ export const AgentInput = React.memo(React.forwardRef<MultiTextInputHandle, Agen
     // Check if this is a Codex session
     const isCodex = props.metadata?.flavor === 'codex';
 
+    // Get cached models for Claude sessions (detected once at login)
+    const detectedModels = React.useMemo(() => {
+        return !isCodex ? getDetectedModelModes() : [];
+    }, [isCodex]);
+
+    const modelConfig = React.useMemo(() => {
+        return !isCodex ? getEnhancedModelConfig() : {};
+    }, [isCodex]);
+
     // Calculate context warning
     const contextWarning = props.usageData?.contextSize
         ? getContextWarning(props.usageData.contextSize, props.alwaysShowContextSize ?? false, theme)
@@ -442,6 +452,14 @@ export const AgentInput = React.memo(React.forwardRef<MultiTextInputHandle, Agen
             return true;
         }
 
+        // Handle Cmd+Enter or Ctrl+Enter for sending message
+        if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+            if (props.value.trim()) {
+                props.onSend();
+                return true; // Key was handled
+            }
+        }
+
         // Original key handling
         if (Platform.OS === 'web') {
             if (event.key === 'Enter' && !event.shiftKey) {
@@ -566,7 +584,7 @@ export const AgentInput = React.memo(React.forwardRef<MultiTextInputHandle, Agen
                                                     color: isSelected ? theme.colors.radio.active : theme.colors.text,
                                                     ...Typography.default()
                                                 }}>
-                                                    {config.label}
+                                                    {(config as { label: string }).label}
                                                 </Text>
                                             </Pressable>
                                         );
@@ -592,23 +610,24 @@ export const AgentInput = React.memo(React.forwardRef<MultiTextInputHandle, Agen
                                     }}>
                                         {isCodex ? t('agentInput.codexModel.title') : t('agentInput.model.title')}
                                     </Text>
-                                    {(isCodex 
+                                    {(isCodex
                                         ? (['default', 'gpt-5-minimal', 'gpt-5-low', 'gpt-5-medium', 'gpt-5-high'] as const)
-                                        : (['default', 'adaptiveUsage', 'sonnet', 'opus'] as const)
+                                        : (detectedModels.length > 0 ? detectedModels : ['default', 'adaptiveUsage', 'sonnet', 'sonnet-4', 'opus'] as const)
                                     ).map((model) => {
-                                        const modelConfig = isCodex ? {
+                                        const currentModelConfig = isCodex ? {
                                             'default': { label: t('agentInput.model.default') },
                                             'gpt-5-minimal': { label: t('agentInput.codexModel.gpt5Minimal') },
                                             'gpt-5-low': { label: t('agentInput.codexModel.gpt5Low') },
                                             'gpt-5-medium': { label: t('agentInput.codexModel.gpt5Medium') },
                                             'gpt-5-high': { label: t('agentInput.codexModel.gpt5High') },
-                                        } : {
+                                        } : (Object.keys(modelConfig).length > 0 ? modelConfig : {
                                             default: { label: t('agentInput.model.default') },
                                             adaptiveUsage: { label: t('agentInput.model.adaptiveUsage') },
                                             sonnet: { label: t('agentInput.model.sonnet') },
+                                            'sonnet-4': { label: 'Claude 4.1' },
                                             opus: { label: t('agentInput.model.opus') },
-                                        };
-                                        const config = modelConfig[model as keyof typeof modelConfig];
+                                        });
+                                        const config = currentModelConfig[model as keyof typeof currentModelConfig];
                                         if (!config) return null;
                                         const isSelected = props.modelMode === model || (model === 'default' && !props.modelMode);
 
@@ -648,7 +667,7 @@ export const AgentInput = React.memo(React.forwardRef<MultiTextInputHandle, Agen
                                                     color: isSelected ? theme.colors.radio.active : theme.colors.text,
                                                     ...Typography.default()
                                                 }}>
-                                                    {config.label}
+                                                    {(config as { label: string }).label}
                                                 </Text>
                                             </Pressable>
                                         );

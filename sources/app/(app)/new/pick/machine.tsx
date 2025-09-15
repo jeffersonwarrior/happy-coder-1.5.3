@@ -6,7 +6,7 @@ import { Item } from '@/components/Item';
 import { Typography } from '@/constants/Typography';
 import { useAllMachines } from '@/sync/storage';
 import { Ionicons } from '@expo/vector-icons';
-import { isMachineOnline } from '@/utils/machineUtils';
+import { isMachineOnline, getMachineConnectionState } from '@/utils/machineUtils';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { layout } from '@/components/layout';
 import { t } from '@/text';
@@ -119,7 +119,8 @@ export default function MachinePickerScreen() {
                     {machines.map((machine) => {
                         const displayName = machine.metadata?.displayName || machine.metadata?.host || machine.id;
                         const hostName = machine.metadata?.host || machine.id;
-                        const offline = !isMachineOnline(machine);
+                        const connectionState = getMachineConnectionState(machine);
+                        const offline = !connectionState.isOnline;
                         const isSelected = params.selectedId === machine.id;
 
                         return (

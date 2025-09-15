@@ -15,7 +15,7 @@ export default function TerminalConnectScreen() {
     const router = useRouter();
     const [publicKey, setPublicKey] = useState<string | null>(null);
     const [hashProcessed, setHashProcessed] = useState(false);
-    const { processAuthUrl, isLoading } = useConnectTerminal({
+    const { processAuthUrl, isLoading, authStatus, statusMessage } = useConnectTerminal({
         onSuccess: () => {
             router.back();
         }
@@ -200,15 +200,50 @@ export default function TerminalConnectScreen() {
                 />
             </ItemGroup>
 
+            {/* Status Indicator */}
+            {authStatus !== 'idle' && statusMessage && (
+                <ItemGroup>
+                    <View style={{
+                        paddingHorizontal: 16,
+                        paddingVertical: 12,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 8
+                        }}>
+                            {authStatus === 'success' && (
+                                <Ionicons name="checkmark-circle" size={20} color="#34C759" />
+                            )}
+                            {authStatus === 'error' && (
+                                <Ionicons name="alert-circle" size={20} color="#FF3B30" />
+                            )}
+                            {(authStatus === 'processing' || authStatus === 'encrypting' || authStatus === 'connecting') && (
+                                <Ionicons name="sync" size={20} color="#007AFF" />
+                            )}
+                            <Text style={{
+                                ...Typography.default(),
+                                fontSize: 14,
+                                color: authStatus === 'success' ? '#34C759' :
+                                       authStatus === 'error' ? '#FF3B30' : '#007AFF'
+                            }}>
+                                {statusMessage}
+                            </Text>
+                        </View>
+                    </View>
+                </ItemGroup>
+            )}
+
             {/* Action Buttons */}
             <ItemGroup>
-                <View style={{ 
+                <View style={{
                     paddingHorizontal: 16,
                     paddingVertical: 16,
-                    gap: 12 
+                    gap: 12
                 }}>
                     <RoundButton
-                        title={isLoading ? t('terminal.connecting') : t('terminal.acceptConnection')}
+                        title={isLoading ? statusMessage || t('terminal.connecting') : t('terminal.acceptConnection')}
                         onPress={handleConnect}
                         size="large"
                         disabled={isLoading}

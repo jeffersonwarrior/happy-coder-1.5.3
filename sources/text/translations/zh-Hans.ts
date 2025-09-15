@@ -84,6 +84,8 @@ export const zhHans = {
         voiceAssistantSubtitle: '配置语音交互偏好',
         featuresTitle: '功能',
         featuresSubtitle: '启用或禁用应用功能',
+        tokenUsageDashboard: 'Token 使用仪表板',
+        tokenUsageDashboardSubtitle: '查看详细的 Token 使用统计和趋势',
         developer: '开发者',
         developerTools: '开发者工具',
         about: '关于',
@@ -164,6 +166,18 @@ export const zhHans = {
         commandPaletteDisabled: '快速命令访问已禁用',
         markdownCopyV2: 'Markdown 复制 v2',
         markdownCopyV2Subtitle: '长按打开复制模态框',
+        gitFeatures: 'Git 功能',
+        gitFeaturesDescription: '配置 Happy Coder 如何与 Git 仓库交互。',
+        disableCopyrightAttribution: '禁用版权归属',
+        disableCopyrightAttributionSubtitle: '从提交消息中移除 Happy/Claude 归属',
+        voiceFeatures: '语音功能',
+        voiceFeaturesDescription: '使用您自己的 ElevenLabs 凭据配置语音助手设置。',
+        elevenLabsApiKey: 'ElevenLabs API 密钥',
+        elevenLabsApiKeySubtitle: '您用于语音会话的自定义 ElevenLabs API 密钥。',
+        elevenLabsApiKeyPlaceholder: '输入 API 密钥...',
+        elevenLabsAgentId: 'ElevenLabs 代理 ID',
+        elevenLabsAgentIdSubtitle: '您用于语音会话的自定义 ElevenLabs 代理 ID。',
+        elevenLabsAgentIdPlaceholder: '输入代理 ID...',
     },
 
     errors: {
@@ -655,6 +669,14 @@ export const zhHans = {
         unknownEvent: '未知事件',
         usageLimitUntil: ({ time }: { time: string }) => `使用限制到 ${time}`,
         unknownTime: '未知时间',
+        retrying: {
+            single: '正在重试发送消息...',
+            multiple: ({ count }: { count: number }) => `正在重试发送 ${count} 条消息...`,
+        },
+        failed: {
+            single: '消息发送失败',
+            multiple: ({ count }: { count: number }) => `${count} 条消息发送失败`,
+        },
     },
 
     codex: {

@@ -76,6 +76,8 @@ export const ru: TranslationStructure = {
         voiceAssistantSubtitle: 'Настройка предпочтений голосового взаимодействия',
         featuresTitle: 'Возможности',
         featuresSubtitle: 'Включить или отключить функции приложения',
+        tokenUsageDashboard: 'Панель использования токенов',
+        tokenUsageDashboardSubtitle: 'Просмотр подробной статистики и тенденций использования токенов',
         developer: 'Разработчик',
         developerTools: 'Инструменты разработчика',
         about: 'О программе',
@@ -156,6 +158,18 @@ export const ru: TranslationStructure = {
         commandPaletteDisabled: 'Быстрый доступ к командам отключён',
         markdownCopyV2: 'Markdown Copy v2',
         markdownCopyV2Subtitle: 'Долгое нажатие открывает модальное окно копирования',
+        gitFeatures: 'Функции Git',
+        gitFeaturesDescription: 'Настройте, как Happy Coder взаимодействует с Git-репозиториями.',
+        disableCopyrightAttribution: 'Отключить атрибуцию авторских прав',
+        disableCopyrightAttributionSubtitle: 'Удалить атрибуцию Happy/Claude из commit-сообщений',
+        voiceFeatures: 'Голосовые функции',
+        voiceFeaturesDescription: 'Настройте параметры голосового помощника с вашими собственными учётными данными ElevenLabs.',
+        elevenLabsApiKey: 'API-ключ ElevenLabs',
+        elevenLabsApiKeySubtitle: 'Ваш персональный API-ключ ElevenLabs для голосовых сессий.',
+        elevenLabsApiKeyPlaceholder: 'Введите API-ключ...',
+        elevenLabsAgentId: 'ID агента ElevenLabs',
+        elevenLabsAgentIdSubtitle: 'Ваш персональный ID агента ElevenLabs для голосовых сессий.',
+        elevenLabsAgentIdPlaceholder: 'Введите ID агента...',
     },
 
     errors: {
@@ -653,6 +667,14 @@ export const ru: TranslationStructure = {
         unknownEvent: 'Неизвестное событие',
         usageLimitUntil: ({ time }: { time: string }) => `Лимит использования достигнут до ${time}`,
         unknownTime: 'неизвестное время',
+        retrying: {
+            single: 'Повторная отправка сообщения...',
+            multiple: ({ count }: { count: number }) => `Повторная отправка ${count} ${plural({ count, one: 'сообщения', few: 'сообщений', many: 'сообщений' })}...`,
+        },
+        failed: {
+            single: 'Не удалось отправить сообщение',
+            multiple: ({ count }: { count: number }) => `Не удалось отправить ${count} ${plural({ count, one: 'сообщение', few: 'сообщения', many: 'сообщений' })}`,
+        },
     },
 
     codex: {

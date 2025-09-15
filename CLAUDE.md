@@ -41,7 +41,7 @@ The app includes an in-app changelog feature that displays version history to us
 
 After updating CHANGELOG.md, run:
 ```bash
-npx tsx sources/scripts/parseChangelog.ts
+yarn dlx tsx sources/scripts/parseChangelog.ts
 ```
 
 This generates `sources/changelog/changelog.json` which is used by the app.

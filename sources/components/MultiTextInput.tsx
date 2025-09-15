@@ -8,6 +8,9 @@ export type SupportedKey = 'Enter' | 'Escape' | 'ArrowUp' | 'ArrowDown' | 'Arrow
 export interface KeyPressEvent {
     key: SupportedKey;
     shiftKey: boolean;
+    ctrlKey: boolean;
+    metaKey: boolean; // Cmd key on Mac/iOS
+    altKey: boolean;
 }
 
 export type OnKeyPressCallback = (event: KeyPressEvent) => boolean;
@@ -96,9 +99,12 @@ export const MultiTextInput = React.forwardRef<MultiTextInputHandle, MultiTextIn
         if (normalizedKey) {
             const keyEvent: KeyPressEvent = {
                 key: normalizedKey,
-                shiftKey: (nativeEvent as any).shiftKey || false
+                shiftKey: (nativeEvent as any).shiftKey || false,
+                ctrlKey: (nativeEvent as any).ctrlKey || false,
+                metaKey: (nativeEvent as any).metaKey || false,
+                altKey: (nativeEvent as any).altKey || false
             };
-            
+
             const handled = onKeyPress(keyEvent);
             if (handled) {
                 e.preventDefault();

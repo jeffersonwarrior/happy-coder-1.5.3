@@ -84,6 +84,8 @@ export const ca: TranslationStructure = {
         voiceAssistantSubtitle: 'Configura les preferències d\'interacció per veu',
         featuresTitle: 'Funcions',
         featuresSubtitle: 'Activa o desactiva les funcions de l\'aplicació',
+        tokenUsageDashboard: 'Panell d\'ús de tokens',
+        tokenUsageDashboardSubtitle: 'Visualitza estadístiques detallades i tendències d\'ús de tokens',
         developer: 'Desenvolupador',
         developerTools: 'Eines de desenvolupador',
         about: 'Quant a',
@@ -164,6 +166,18 @@ export const ca: TranslationStructure = {
         commandPaletteDisabled: 'Accés ràpid a comandes desactivat',
         markdownCopyV2: 'Markdown Copy v2',
         markdownCopyV2Subtitle: 'Pulsació llarga obre modal de còpia',
+        gitFeatures: 'Funcions de Git',
+        gitFeaturesDescription: 'Configura com Happy Coder interactua amb repositoris Git.',
+        disableCopyrightAttribution: 'Desactiva l\'atribució de drets d\'autor',
+        disableCopyrightAttributionSubtitle: 'Elimina l\'atribució de Happy/Claude dels missatges de commit',
+        voiceFeatures: 'Funcions de veu',
+        voiceFeaturesDescription: 'Configura les preferències de l\'assistent de veu amb les teves pròpies credencials d\'ElevenLabs.',
+        elevenLabsApiKey: 'Clau API d\'ElevenLabs',
+        elevenLabsApiKeySubtitle: 'La teva clau API personalitzada d\'ElevenLabs per a sessions de veu.',
+        elevenLabsApiKeyPlaceholder: 'Introdueix la clau API...',
+        elevenLabsAgentId: 'ID d\'Agent d\'ElevenLabs',
+        elevenLabsAgentIdSubtitle: 'El teu ID d\'agent personalitzat d\'ElevenLabs per a sessions de veu.',
+        elevenLabsAgentIdPlaceholder: 'Introdueix l\'ID de l\'agent...',
     },
 
     errors: {
@@ -655,6 +669,14 @@ export const ca: TranslationStructure = {
         unknownEvent: 'Esdeveniment desconegut',
         usageLimitUntil: ({ time }: { time: string }) => `Límit d'ús assolit fins a ${time}`,
         unknownTime: 'temps desconegut',
+        retrying: {
+            single: 'Reintentant el missatge...',
+            multiple: ({ count }: { count: number }) => `Reintentant ${count} missatges...`,
+        },
+        failed: {
+            single: 'El missatge no s\'ha pogut enviar',
+            multiple: ({ count }: { count: number }) => `${count} missatges no s'han pogut enviar`,
+        },
     },
 
     codex: {

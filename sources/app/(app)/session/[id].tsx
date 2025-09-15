@@ -32,6 +32,9 @@ import { useUnistyles } from 'react-native-unistyles';
 import { ChatList } from '@/components/ChatList';
 import { t } from '@/text';
 import { isVersionSupported, MINIMUM_CLI_VERSION } from '@/utils/versionUtils';
+import { MessageRetryIndicator } from '@/components/MessageRetryIndicator';
+import { StatuslineMetrics } from '@/components/StatuslineMetrics';
+import type { ModelMode } from '@/components/PermissionModeSelector';
 
 
 export default React.memo(() => {
@@ -102,7 +105,7 @@ function SessionView({ sessionId, session }: { sessionId: string, session: Sessi
     }, [sessionId]);
 
     // Function to update model mode
-    const updateModelMode = useCallback((mode: 'default' | 'adaptiveUsage' | 'sonnet' | 'opus' | 'gpt-5-minimal' | 'gpt-5-low' | 'gpt-5-medium' | 'gpt-5-high') => {
+    const updateModelMode = useCallback((mode: ModelMode) => {
         storage.getState().updateSessionModelMode(sessionId, mode);
     }, [sessionId]);
 
@@ -322,6 +325,25 @@ function SessionView({ sessionId, session }: { sessionId: string, session: Sessi
                     </Text>
                     <Ionicons name="close" size={14} color="#856404" style={{ marginLeft: 8 }} />
                 </Pressable>
+            )}
+
+            {/* Message Retry Indicator - positioned below header/voice bar */}
+            <MessageRetryIndicator sessionId={sessionId} />
+
+            {/* StatusLine Metrics - positioned at bottom when session has usage data */}
+            {sessionUsage && (
+                <View style={{
+                    position: 'absolute',
+                    bottom: safeArea.bottom + 8,
+                    right: 16,
+                    zIndex: 100,
+                    maxWidth: 300
+                }}>
+                    <StatuslineMetrics
+                        usage={sessionUsage}
+                        variant="compact"
+                    />
+                </View>
             )}
 
             {/* Main content area - no padding since header is overlay */}

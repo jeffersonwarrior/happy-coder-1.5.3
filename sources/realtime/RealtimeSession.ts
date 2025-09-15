@@ -56,6 +56,22 @@ export function getCurrentRealtimeSessionId(): string | null {
     return currentSessionId;
 }
 
+export function muteVoiceSession(): void {
+    if (voiceSession) {
+        voiceSession.mute();
+    }
+}
+
+export function unmuteVoiceSession(): void {
+    if (voiceSession) {
+        voiceSession.unmute();
+    }
+}
+
+export function isVoiceSessionMuted(): boolean {
+    return voiceSession ? voiceSession.isMuted() : false;
+}
+
 export function updateCurrentSessionId(sessionId: string | null) {
     console.log(`🔄 Realtime session ID updated: ${sessionId}`);
     currentSessionId = sessionId;

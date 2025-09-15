@@ -5,7 +5,7 @@ import { useRealtimeStatus } from '@/sync/storage';
 import { StatusDot } from './StatusDot';
 import { Typography } from '@/constants/Typography';
 import { Ionicons } from '@expo/vector-icons';
-import { stopRealtimeSession } from '@/realtime/RealtimeSession';
+import { stopRealtimeSession, muteVoiceSession, unmuteVoiceSession, isVoiceSessionMuted } from '@/realtime/RealtimeSession';
 import { useUnistyles } from 'react-native-unistyles';
 
 interface VoiceAssistantStatusBarProps {
@@ -16,6 +16,14 @@ interface VoiceAssistantStatusBarProps {
 export const VoiceAssistantStatusBar = React.memo(({ variant = 'full', style }: VoiceAssistantStatusBarProps) => {
     const { theme } = useUnistyles();
     const realtimeStatus = useRealtimeStatus();
+    const [isMuted, setIsMuted] = React.useState(false);
+
+    // Update mute status when component mounts or voice session changes
+    React.useEffect(() => {
+        if (realtimeStatus === 'connected') {
+            setIsMuted(isVoiceSessionMuted());
+        }
+    }, [realtimeStatus]);
 
     // Don't render if disconnected
     if (realtimeStatus === 'disconnected') {
@@ -71,6 +79,20 @@ export const VoiceAssistantStatusBar = React.memo(({ variant = 'full', style }: 
         }
     };
 
+    const handleMuteToggle = () => {
+        try {
+            if (isMuted) {
+                unmuteVoiceSession();
+                setIsMuted(false);
+            } else {
+                muteVoiceSession();
+                setIsMuted(true);
+            }
+        } catch (error) {
+            console.error('Error toggling mute:', error);
+        }
+    };
+
     if (variant === 'full') {
         // Mobile full-width version
         return (
@@ -101,20 +123,31 @@ export const VoiceAssistantStatusBar = React.memo(({ variant = 'full', style }: 
                                 style={styles.statusDot}
                             />
                             <Ionicons
-                                name="mic"
+                                name={isMuted ? "mic-off" : "mic"}
                                 size={16}
-                                color={statusInfo.textColor}
+                                color={isMuted ? theme.colors.status.error : statusInfo.textColor}
                                 style={styles.micIcon}
                             />
                             <Text style={[
                                 styles.statusText,
                                 { color: statusInfo.textColor }
                             ]}>
-                                {statusInfo.text}
+                                {isMuted ? 'Voice Assistant Muted' : statusInfo.text}
                             </Text>
                         </View>
                         
                         <View style={styles.rightSection}>
+                            <Pressable
+                                onPress={handleMuteToggle}
+                                style={styles.muteButton}
+                                hitSlop={10}
+                            >
+                                <Ionicons
+                                    name={isMuted ? "mic-off" : "mic"}
+                                    size={18}
+                                    color={isMuted ? theme.colors.status.error : statusInfo.textColor}
+                                />
+                            </Pressable>
                             <Text style={[styles.tapToEndText, { color: statusInfo.textColor }]}>
                                 Tap to end
                             </Text>
@@ -151,9 +184,9 @@ export const VoiceAssistantStatusBar = React.memo(({ variant = 'full', style }: 
                             style={styles.statusDot}
                         />
                         <Ionicons
-                            name="mic"
+                            name={isMuted ? "mic-off" : "mic"}
                             size={16}
-                            color={statusInfo.textColor}
+                            color={isMuted ? theme.colors.status.error : statusInfo.textColor}
                             style={styles.micIcon}
                         />
                         <Text style={[
@@ -161,10 +194,22 @@ export const VoiceAssistantStatusBar = React.memo(({ variant = 'full', style }: 
                             styles.sidebarStatusText,
                             { color: statusInfo.textColor }
                         ]}>
-                            {statusInfo.text}
+                            {isMuted ? 'Muted' : statusInfo.text}
                         </Text>
                     </View>
-                    
+
+                    <Pressable
+                        onPress={handleMuteToggle}
+                        style={styles.muteButton}
+                        hitSlop={5}
+                    >
+                        <Ionicons
+                            name={isMuted ? "mic-off" : "mic"}
+                            size={14}
+                            color={isMuted ? theme.colors.status.error : statusInfo.textColor}
+                        />
+                    </Pressable>
+
                     <Ionicons
                         name="close"
                         size={14}
@@ -219,6 +264,11 @@ const styles = StyleSheet.create({
     },
     micIcon: {
         marginRight: 6,
+    },
+    muteButton: {
+        padding: 4,
+        marginRight: 8,
+        borderRadius: 4,
     },
     closeIcon: {
         marginLeft: 8,

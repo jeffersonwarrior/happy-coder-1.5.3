@@ -5,6 +5,7 @@ import * as Updates from 'expo-updates';
 import { clearPersistence } from '@/sync/persistence';
 import { Platform } from 'react-native';
 import { trackLogout } from '@/track';
+import { initializeModelDetection, clearModelCache } from '@/utils/modelDetection';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -19,11 +20,29 @@ export function AuthProvider({ children, initialCredentials }: { children: React
     const [isAuthenticated, setIsAuthenticated] = useState(!!initialCredentials);
     const [credentials, setCredentials] = useState<AuthCredentials | null>(initialCredentials);
 
+    // Initialize model detection for existing sessions (app startup with saved credentials)
+    useEffect(() => {
+        if (initialCredentials && isAuthenticated) {
+            initializeModelDetection().catch(error => {
+                console.warn('Model detection initialization failed on startup:', error);
+            });
+        }
+    }, [initialCredentials, isAuthenticated]);
+
     const login = async (token: string, secret: string) => {
         const newCredentials: AuthCredentials = { token, secret };
         const success = await TokenStorage.setCredentials(newCredentials);
         if (success) {
             await syncCreate(newCredentials);
+
+            // Initialize model detection once at login
+            try {
+                await initializeModelDetection();
+            } catch (error) {
+                console.warn('Model detection initialization failed:', error);
+                // Don't fail login if model detection fails
+            }
+
             setCredentials(newCredentials);
             setIsAuthenticated(true);
         } else {
@@ -34,6 +53,7 @@ export function AuthProvider({ children, initialCredentials }: { children: React
     const logout = async () => {
         trackLogout();
         clearPersistence();
+        clearModelCache(); // Clear cached models on logout
         await TokenStorage.removeCredentials();
         
         // Update React state to ensure UI consistency

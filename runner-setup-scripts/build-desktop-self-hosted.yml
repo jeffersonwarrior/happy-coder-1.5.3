@@ -1,0 +1,87 @@
+name: Build Desktop App (Self-hosted)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ubuntu-self-hosted
+            os: ubuntu
+          - platform: windows-self-hosted
+            os: windows
+          - platform: macos-self-hosted
+            os: macos
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v5
+
+    # Node.js setup (simplified since it's pre-installed)
+    - name: Setup Node.js
+      run: |
+        node --version
+        npm --version
+
+    # Rust setup (simplified since it's pre-installed)
+    - name: Setup Rust
+      run: |
+        rustc --version
+        cargo --version
+
+    # Clear any previous builds
+    - name: Clean previous builds
+      run: |
+        if [ "${{ matrix.os }}" = "windows" ]; then
+          if exist src-tauri/target rmdir /s /q src-tauri/target
+          if exist node_modules rmdir /s /q node_modules
+        else
+          rm -rf src-tauri/target node_modules
+        fi
+      shell: bash
+
+    # Install dependencies (with caching)
+    - name: Install dependencies
+      run: |
+        npm ci --legacy-peer-deps
+      env:
+        # Use faster npm registry for private networks
+        NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+    # Build Tauri app with optimizations
+    - name: Build Tauri app
+      uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Rust optimizations
+        CARGO_INCREMENTAL: 1
+        CARGO_TARGET_DIR: src-tauri/target
+        # Build with release optimizations
+        TAURI_BUILD_FLAGS: --verbose
+      with:
+        tagName: app-v__VERSION__
+        releaseName: 'Happy Desktop v__VERSION__ (Self-hosted)'
+        releaseBody: 'Desktop builds compiled on self-hosted runners for faster build times.'
+        releaseDraft: true
+        prerelease: false
+        includeDebug: false
+
+    # Upload artifacts for faster access
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: happy-desktop-${{ matrix.os }}
+        path: |
+          src-tauri/target/release/bundle/
+        retention-days: 30

@@ -20,11 +20,13 @@ regexes = [
 ]
 
 [[allowlist]]
-description = "Firebase/Google configuration files"
+description = "Firebase/Google configuration files and local environment"
 paths = [
     '''google-services\.json$''',
     '''google-services\.json\.template$''',
     '''GoogleService-Info\.plist$''',
+    '''\.env$''',
+    '''\.env\..*$''',
 ]
 
 # Allow common development placeholders

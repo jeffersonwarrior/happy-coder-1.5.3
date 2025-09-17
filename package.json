@@ -1,7 +1,7 @@
 {
   "name": "happy",
   "main": "index.ts",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "_versionNote": "Version is managed in version.txt file",
   "scripts": {
     "start": "expo start",

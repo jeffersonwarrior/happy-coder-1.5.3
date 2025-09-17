@@ -64,15 +64,21 @@ jobs:
 
     - name: Notify Build Complete
       if: always()
-      run: |
-        curl -X POST "https://api.postmarkapp.com/email" \
-          -H "Accept: application/json" \
-          -H "Content-Type: application/json" \
-          -H "X-Postmark-Server-Token: ${{ secrets.POSTMARK_SERVER_TOKEN }}" \
-          -d '{
+      uses: fjogeleit/http-request-action@v1
+      with:
+        url: 'https://api.postmarkapp.com/email'
+        method: 'POST'
+        customHeaders: |
+          {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Postmark-Server-Token": "${{ secrets.POSTMARK_SERVER_TOKEN }}"
+          }
+        data: |
+          {
             "From": "hello@blueroots.io",
             "To": "jefferson@heimdallstrategy.com",
             "Subject": "🎉 Happy Desktop Build ${{ job.status }} - ${{ matrix.os }}",
             "HtmlBody": "<h2>Happy Desktop Build Completed!</h2><p><strong>Status:</strong> ${{ job.status }}</p><p><strong>Platform:</strong> ${{ matrix.os }}</p><p><strong>Run:</strong> <a href=\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View Details</a></p><p>Build artifacts should be available in the draft release.</p>",
             "TextBody": "Happy Desktop build completed!\n\nStatus: ${{ job.status }}\nPlatform: ${{ matrix.os }}\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\nBuild artifacts should be available in the draft release."
-          }'
+          }

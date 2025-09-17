@@ -48,7 +48,7 @@ CLAUDE.local.md
 devtasks/
 
 # Secrets and credentials
-google-services.json
+# google-services.json - Now included in repo (Firebase keys are public by design)
 GoogleService-Info.plist
 .env
 .env.local

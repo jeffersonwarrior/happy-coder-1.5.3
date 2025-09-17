@@ -3,38 +3,24 @@
 
 title = "Happy Coder GitLeaks Config"
 
-# Allowlist Firebase API keys and Google Services files
-[[allowlist]]
-description = "Firebase API Keys (public by design)"
+# Allowlist Firebase API keys, Google Services files, and development placeholders
+[allowlist]
+description = "Firebase API Keys, development placeholders, and config files"
 regexes = [
     '''AIza[A-Za-z0-9_-]{35}''',
-]
-
-[[allowlist]]
-description = "Google Services JSON template placeholders"
-regexes = [
     '''YOUR_GOOGLE_API_KEY_HERE''',
     '''YOUR_PROJECT_ID''',
     '''YOUR_PROJECT_NUMBER''',
     '''YOUR_MOBILE_SDK_APP_ID''',
+    '''your_.*_here''',
+    '''YOUR_.*_HERE''',
+    '''<your-.*>''',
+    '''\{your.*\}''',
 ]
-
-[[allowlist]]
-description = "Firebase/Google configuration files and local environment"
 paths = [
     '''google-services\.json$''',
     '''google-services\.json\.template$''',
     '''GoogleService-Info\.plist$''',
     '''\.env$''',
     '''\.env\..*$''',
-]
-
-# Allow common development placeholders
-[[allowlist]]
-description = "Development placeholders"
-regexes = [
-    '''your_.*_here''',
-    '''YOUR_.*_HERE''',
-    '''<your-.*>''',
-    '''\{your.*\}''',
 ]

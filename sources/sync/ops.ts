@@ -8,6 +8,37 @@ import { sync } from './sync';
 import type { MachineMetadata } from './storageTypes';
 import { log } from '@/log';
 
+// List of dangerous commands that could kill the session or daemon
+const DANGEROUS_COMMANDS = [
+  'killall node',
+  'killall nodejs',
+  'pkill node',
+  'pkill nodejs',
+  'kill.*node',
+  'sudo killall',
+  'killall.*claude',
+  'killall.*happy',
+];
+
+/**
+ * Check if a bash command contains dangerous patterns that could kill the session
+ */
+function isDangerousCommand(command: string): { dangerous: boolean; reason?: string } {
+  const lowerCommand = command.toLowerCase().trim();
+
+  for (const dangerousPattern of DANGEROUS_COMMANDS) {
+    const regex = new RegExp(dangerousPattern, 'i');
+    if (regex.test(lowerCommand)) {
+      return {
+        dangerous: true,
+        reason: `Command contains dangerous pattern: '${dangerousPattern}'. This could kill the Happy session.`
+      };
+    }
+  }
+
+  return { dangerous: false };
+}
+
 // Strict type definitions for all operations
 
 // Permission operation types
@@ -301,19 +332,46 @@ export async function sessionSwitch(sessionId: string, to: 'remote' | 'local'): 
  */
 export async function sessionBash(sessionId: string, request: SessionBashRequest): Promise<SessionBashResponse> {
   try {
+    // Check if the command is dangerous before executing
+    const dangerCheck = isDangerousCommand(request.command);
+    if (dangerCheck.dangerous) {
+      log.log(`🚫 Blocked dangerous command in session ${sessionId}: ${request.command}`);
+      log.log(`🛡️ Reason: ${dangerCheck.reason}`);
+
+      return {
+        success: false,
+        stdout: '',
+        stderr: `Command blocked for safety: ${dangerCheck.reason}\n\nIf you need to manage processes, use specific process IDs instead of killall commands.`,
+        exitCode: 1,
+        error: `Dangerous command blocked: ${dangerCheck.reason}`,
+      };
+    }
+
+    log.log(`🔧 Executing bash command in session ${sessionId}: ${request.command.substring(0, 100)}${request.command.length > 100 ? '...' : ''}`);
+
     const response = await apiSocket.sessionRPC<SessionBashResponse, SessionBashRequest>(
       sessionId,
       'bash',
       request,
     );
+
+    if (response.success) {
+      log.log(`✅ Bash command completed successfully in session ${sessionId}`);
+    } else {
+      log.log(`⚠️ Bash command failed in session ${sessionId}: ${response.stderr || response.error}`);
+    }
+
     return response;
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    log.log(`❌ Bash command exception in session ${sessionId}: ${errorMessage}`);
+
     return {
       success: false,
       stdout: '',
-      stderr: error instanceof Error ? error.message : 'Unknown error',
+      stderr: errorMessage,
       exitCode: -1,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: errorMessage,
     };
   }
 }

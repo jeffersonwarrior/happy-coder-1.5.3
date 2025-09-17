@@ -39,20 +39,50 @@ jobs:
     - name: Install dependencies (Ubuntu only)
       if: matrix.os == 'ubuntu'
       run: |
-        if [ "${{ matrix.platform }}" != "ubuntu-self-hosted" ]; then
+        echo "Installing/verifying Tauri dependencies for Ubuntu..."
+
+        # Always ensure dependencies are installed, even on self-hosted
+        if command -v apt-get >/dev/null 2>&1; then
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev
-        else
-          echo "Dependencies already installed on self-hosted runner"
         fi
+
+        # Verify critical dependencies
+        echo "Verifying dependencies..."
+        pkg-config --exists gtk+-3.0 || echo "WARNING: GTK+3 not found"
+        pkg-config --exists webkit2gtk-4.1 || echo "WARNING: WebKit2GTK not found"
+
+        echo "Rust toolchain:"
+        rustc --version
+        cargo --version
 
     - name: Install dependencies
       run: npm install --legacy-peer-deps
+
+    - name: Debug build environment (Ubuntu only)
+      if: matrix.os == 'ubuntu'
+      run: |
+        echo "=== Build Environment Debug ==="
+        echo "Working directory: $(pwd)"
+        echo "Node version: $(node --version)"
+        echo "npm version: $(npm --version)"
+        echo "Rust version: $(rustc --version)"
+        echo "Cargo version: $(cargo --version)"
+        echo ""
+        echo "=== Project structure ==="
+        ls -la
+        echo ""
+        echo "=== src-tauri directory ==="
+        ls -la src-tauri/ || echo "src-tauri directory not found"
+        echo ""
+        echo "=== Tauri dependencies ==="
+        cd src-tauri && cargo tree --depth 1 || echo "Could not check Cargo dependencies"
 
     - name: Build Tauri app
       uses: tauri-apps/tauri-action@v0.5
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RUST_LOG: tauri=debug
       with:
         projectPath: src-tauri
         tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version

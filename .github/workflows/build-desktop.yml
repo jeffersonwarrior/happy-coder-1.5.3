@@ -50,10 +50,11 @@ jobs:
       run: npm install --legacy-peer-deps
 
     - name: Build Tauri app
-      uses: tauri-apps/tauri-action@v0
+      uses: tauri-apps/tauri-action@v0.5
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        projectPath: src-tauri
         tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
         releaseName: 'Happy Desktop v__VERSION__'
         releaseBody: 'See the assets to download this version and install.'

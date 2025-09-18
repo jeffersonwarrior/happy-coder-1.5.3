@@ -2,8 +2,11 @@ import type { MarkdownBlock } from './parseMarkdown';
 import { parseMarkdownSpans } from './parseMarkdownSpans';
 
 export function parseMarkdownBlock(markdown: string) {
+  // Filter out system tags and other non-user content before parsing
+  const filteredMarkdown = filterSystemContent(markdown);
+
   const blocks: MarkdownBlock[] = [];
-  const lines = markdown.split('\n');
+  const lines = filteredMarkdown.split('\n');
   let index = 0;
   outer: while (index < lines.length) {
     const line = lines[index];
@@ -101,4 +104,66 @@ export function parseMarkdownBlock(markdown: string) {
     }
   }
   return blocks;
+}
+
+/**
+ * Filter out system tags and other non-user content from markdown
+ * Removes XML tags that are not meant for user consumption
+ */
+function filterSystemContent(markdown: string): string {
+  const lines = markdown.split('\n');
+  const filteredLines: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // List of system/internal XML tags to filter out
+    const systemTags = [
+      'system-reminder',
+      'function_calls',
+      'antml:function_calls',
+      'antml:invoke',
+      'antml:parameter',
+      'function_results',
+      'tool_use',
+      'tool_result',
+      'commentary',
+      'example',
+      'reasoning'
+    ];
+
+    // Check if this line starts any system tag block
+    let isSystemTag = false;
+    let tagToClose = '';
+
+    for (const tag of systemTags) {
+      if (trimmed.startsWith(`<${tag}>`)) {
+        isSystemTag = true;
+        tagToClose = `</${tag}>`;
+        break;
+      }
+    }
+
+    if (isSystemTag) {
+      // Skip lines until we find the closing tag
+      i++;
+      while (i < lines.length) {
+        const nextLine = lines[i];
+        if (nextLine.trim() === tagToClose) {
+          i++; // Skip the closing tag too
+          break;
+        }
+        i++;
+      }
+      continue;
+    }
+
+    // Keep the line if it's not a system tag
+    filteredLines.push(line);
+    i++;
+  }
+
+  return filteredLines.join('\n');
 }

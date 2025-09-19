@@ -14,7 +14,12 @@ const bundleId = {
 }[variant];
 
 // Read version from version.txt
-const version = readFileSync(join(process.cwd(), 'version.txt'), 'utf8').trim();
+let version;
+try {
+    version = readFileSync(join(process.cwd(), 'version.txt'), 'utf8').trim();
+} catch (err) {
+    throw new Error("Failed to read version.txt: " + err.message);
+}
 
 export default {
     expo: {

@@ -1,4 +1,5 @@
 {
+  "_comment": "This is a template file. Copy to google-services.json and replace placeholder values. See GOOGLE_SERVICES_SETUP.md for instructions.",
   "project_info": {
     "project_number": "YOUR_PROJECT_NUMBER",
     "project_id": "YOUR_PROJECT_ID",

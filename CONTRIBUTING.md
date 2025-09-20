@@ -5,6 +5,7 @@ Thank you for your interest in contributing to Happy! This document provides gui
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - **Node.js** 22+ with npm
 - **Rust** (latest stable) for desktop builds
 - **Git** for version control
@@ -13,17 +14,20 @@ Thank you for your interest in contributing to Happy! This document provides gui
 ### Development Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/jeffersonwarrior/happy.git
    cd happy
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install --legacy-peer-deps
    ```
 
 3. **Start development server**
+
    ```bash
    npm run start
    ```
@@ -38,6 +42,7 @@ Thank you for your interest in contributing to Happy! This document provides gui
 ## 📱 Project Architecture
 
 Happy is a cross-platform React Native app built with:
+
 - **Frontend**: React Native + Expo SDK 53
 - **Styling**: Unistyles with theme system
 - **Navigation**: Expo Router v5
@@ -48,6 +53,7 @@ Happy is a cross-platform React Native app built with:
 - **Internationalization**: Custom i18n system
 
 ### Key Directories
+
 ```
 sources/
 ├── app/              # Expo Router screens
@@ -61,12 +67,14 @@ sources/
 ## 🛠 Development Guidelines
 
 ### Code Style
+
 - **Indentation**: 4 spaces
 - **Package Manager**: npm (yarn.lock exists for compatibility)
 - **TypeScript**: Strict mode enabled
 - **Path Aliases**: `@/*` maps to `./sources/*`
 
 ### Important Rules
+
 - ✅ Always run `npm run typecheck` after changes
 - ✅ Use `t(...)` function for ALL user-visible strings
 - ✅ Apply layout constraints from `@/components/layout`
@@ -75,6 +83,7 @@ sources/
 - ❌ Never use `yarn` commands (use npm)
 
 ### Internationalization
+
 **CRITICAL**: All user-visible text must use the `t(...)` function:
 
 ```typescript
@@ -89,22 +98,24 @@ import { t } from '@/text';
 ```
 
 When adding new strings:
+
 1. Check existing keys in `common.*` first
 2. Add to ALL language files in `sources/text/translations/`
 3. Use descriptive, hierarchical keys
 
 ### Styling with Unistyles
+
 Always use `StyleSheet.create` from 'react-native-unistyles':
 
 ```typescript
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet } from 'react-native-unistyles';
 
 const styles = StyleSheet.create((theme, runtime) => ({
-    container: {
-        backgroundColor: theme.colors.background,
-        paddingTop: runtime.insets.top,
-    }
-}))
+  container: {
+    backgroundColor: theme.colors.background,
+    paddingTop: runtime.insets.top,
+  },
+}));
 ```
 
 ## 🧪 Testing
@@ -115,6 +126,7 @@ npm run typecheck     # TypeScript validation
 ```
 
 ### Test Requirements
+
 - Write tests for new features
 - Maintain or improve test coverage
 - Test on multiple platforms when possible
@@ -122,6 +134,7 @@ npm run typecheck     # TypeScript validation
 ## 🔄 Pull Request Process
 
 1. **Fork & Branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -133,6 +146,7 @@ npm run typecheck     # TypeScript validation
    - Add translations for new strings
 
 3. **Test Thoroughly**
+
    ```bash
    npm run typecheck
    npm test
@@ -140,6 +154,7 @@ npm run typecheck     # TypeScript validation
    ```
 
 4. **Commit with Conventional Format**
+
    ```bash
    git commit -m "feat: add new feature description"
    ```
@@ -154,6 +169,7 @@ npm run typecheck     # TypeScript validation
 ## 🐛 Bug Reports
 
 Use the bug report template and include:
+
 - Platform and device details
 - Steps to reproduce
 - Expected vs actual behavior
@@ -162,6 +178,7 @@ Use the bug report template and include:
 ## ✨ Feature Requests
 
 Use the feature request template and include:
+
 - Clear problem statement
 - Proposed solution
 - Alternative approaches considered
@@ -170,6 +187,7 @@ Use the feature request template and include:
 ## 📚 Documentation
 
 When contributing:
+
 - Update relevant README sections
 - Add/update code comments
 - Update CHANGELOG.md for user-facing changes
@@ -178,6 +196,7 @@ When contributing:
 ## 🚀 Release Process
 
 Releases are automated via GitHub Actions:
+
 1. Desktop builds for macOS, Windows, Linux
 2. Mobile builds via EAS (for maintainers)
 3. Automatic changelog generation

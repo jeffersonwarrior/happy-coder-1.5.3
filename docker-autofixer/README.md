@@ -14,6 +14,7 @@ Automated code fixing system using Claude Code, MCP servers, and quality tools.
 ## Quick Start
 
 1. **Clone and Configure**
+
    ```bash
    git clone <this-repo>
    cd docker-autofixer
@@ -22,6 +23,7 @@ Automated code fixing system using Claude Code, MCP servers, and quality tools.
    ```
 
 2. **Deploy**
+
    ```bash
    chmod +x deploy.sh
    ./deploy.sh
@@ -36,6 +38,7 @@ Automated code fixing system using Claude Code, MCP servers, and quality tools.
 ## How It Works
 
 ### Trigger Workflow
+
 1. **Commit Detection**: System monitors for new commits
 2. **RC.txt Check**: Only processes repos with `RC.txt` set to "Ready"
 3. **Repository Cloning**: Clones the repository for analysis
@@ -46,6 +49,7 @@ Automated code fixing system using Claude Code, MCP servers, and quality tools.
 8. **RC.txt Update**: Marks `RC.txt` as "Yes" on completion
 
 ### MCP Integration
+
 - **Exa Search**: Finds best practices and solutions for code issues
 - **GitHub MCP**: Direct GitHub repository interactions
 - **Filesystem MCP**: File system operations within container
@@ -53,12 +57,12 @@ Automated code fixing system using Claude Code, MCP servers, and quality tools.
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/status` | GET | System status |
-| `/webhook` | POST | GitHub webhook receiver |
-| `/trigger` | POST | Manual trigger |
+| Endpoint   | Method | Description             |
+| ---------- | ------ | ----------------------- |
+| `/health`  | GET    | Health check            |
+| `/status`  | GET    | System status           |
+| `/webhook` | POST   | GitHub webhook receiver |
+| `/trigger` | POST   | Manual trigger          |
 
 ## Configuration
 
@@ -82,13 +86,13 @@ EXA_API_KEY=b65999c0-db14-4241-9a53-f58b4656ae4b
 
 ## Services
 
-| Service | Port | Purpose |
-|---------|------|---------|
-| AutoFixer | 3000 | Main application |
-| SonarQube | 9000 | Code quality analysis |
-| Nginx | 80 | Reverse proxy |
-| Grafana | 3001 | Monitoring dashboard |
-| Prometheus | 9090 | Metrics collection |
+| Service    | Port | Purpose               |
+| ---------- | ---- | --------------------- |
+| AutoFixer  | 3000 | Main application      |
+| SonarQube  | 9000 | Code quality analysis |
+| Nginx      | 80   | Reverse proxy         |
+| Grafana    | 3001 | Monitoring dashboard  |
+| Prometheus | 9090 | Metrics collection    |
 
 ## Manual Testing
 
@@ -121,6 +125,7 @@ curl -X POST http://localhost:3000/trigger \
 ## Monitoring
 
 Access monitoring dashboards:
+
 - **Grafana**: http://localhost:3001 (admin/admin)
 - **Prometheus**: http://localhost:9090
 - **SonarQube**: http://localhost:9000
@@ -130,11 +135,13 @@ Access monitoring dashboards:
 ### Common Issues
 
 1. **Health Check Fails**
+
    ```bash
    docker-compose logs autofixer
    ```
 
 2. **SonarQube Not Starting**
+
    ```bash
    # Increase memory
    echo 'vm.max_map_count=262144' | sudo tee -a /etc/sysctl.conf

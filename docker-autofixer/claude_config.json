@@ -26,10 +26,5 @@
     }
   },
   "globalShortcut": "Ctrl+Shift+K",
-  "allowedHTTPSHosts": [
-    "api.anthropic.com",
-    "exa.ai",
-    "github.com",
-    "api.github.com"
-  ]
+  "allowedHTTPSHosts": ["api.anthropic.com", "exa.ai", "github.com", "api.github.com"]
 }

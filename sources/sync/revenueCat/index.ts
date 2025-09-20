@@ -3,17 +3,17 @@
 
 // This will be resolved to either revenueCat.native.ts or revenueCat.web.ts
 // based on the platform
-export { default as RevenueCat } from "./revenueCat";
+export { default as RevenueCat } from './revenueCat';
 export {
-	CustomerInfo,
-	LogLevel,
-	Offering,
-	Offerings,
-	Package,
-	PaywallOptions,
-	PaywallResult,
-	Product,
-	PurchaseResult,
-	RevenueCatConfig,
-	RevenueCatInterface,
-} from "./types";
+  CustomerInfo,
+  LogLevel,
+  Offering,
+  Offerings,
+  Package,
+  PaywallOptions,
+  PaywallResult,
+  Product,
+  PurchaseResult,
+  RevenueCatConfig,
+  RevenueCatInterface,
+} from './types';

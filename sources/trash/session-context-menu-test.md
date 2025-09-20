@@ -5,6 +5,7 @@ This document outlines the testing procedures for the newly implemented session 
 ## Features Implemented
 
 ### 1. Keyboard Shortcuts (Web Platform)
+
 - **Delete**: Delete key or Backspace+Meta to delete session
 - **F2**: Rename session
 - **⌘D**: Duplicate session (shown in context menu)
@@ -14,16 +15,19 @@ This document outlines the testing procedures for the newly implemented session 
 - **Escape**: Clear selection
 
 ### 2. Context Menu Integration
+
 - **SessionsList.tsx**: Already had context menu, enhanced with keyboard shortcuts display
 - **ActiveSessionsGroup.tsx**: Added full context menu support to compact session rows
 - Both components now share the same context menu functionality
 
 ### 3. Gesture Handling
+
 - **Web**: Right-click to open context menu
 - **Mobile**: Long-press to open context menu
 - **Position**: Context menu auto-positions to avoid screen overflow
 
 ### 4. Accessibility Support
+
 - **ARIA roles**: menuitem role for context menu actions
 - **Labels**: Descriptive accessibility labels for sessions
 - **Hints**: Additional accessibility hints for destructive actions
@@ -31,6 +35,7 @@ This document outlines the testing procedures for the newly implemented session 
 - **Focus management**: Visual indicators for focused sessions
 
 ### 5. Platform-Specific Features
+
 - **Keyboard shortcuts**: Only shown on web platform
 - **Native styling**: Platform-appropriate shadows and borders
 - **Responsive positioning**: Adapts to screen size and safe areas
@@ -38,6 +43,7 @@ This document outlines the testing procedures for the newly implemented session 
 ## Testing Checklist
 
 ### Web Platform Testing
+
 - [ ] Right-click on session item opens context menu
 - [ ] Context menu shows keyboard shortcuts
 - [ ] F2 key opens rename dialog
@@ -50,6 +56,7 @@ This document outlines the testing procedures for the newly implemented session 
 - [ ] Context menu handles screen edge overflow
 
 ### Mobile Platform Testing (iOS/Android)
+
 - [ ] Long-press on session item opens context menu
 - [ ] Context menu doesn't show keyboard shortcuts
 - [ ] Touch gestures work properly
@@ -58,11 +65,13 @@ This document outlines the testing procedures for the newly implemented session 
 - [ ] Accessibility labels are announced correctly
 
 ### Tablet Testing
+
 - [ ] Works in both portrait and landscape
 - [ ] Context menu scales appropriately
 - [ ] Touch and gesture interactions feel natural
 
 ### Context Menu Actions Testing
+
 - [ ] Rename: Opens prompt, updates session name
 - [ ] Duplicate: Creates new session with same metadata
 - [ ] Copy ID: Copies session ID to clipboard
@@ -70,6 +79,7 @@ This document outlines the testing procedures for the newly implemented session 
 - [ ] Delete: Shows confirmation, removes session
 
 ### Both List Views Testing
+
 - [ ] SessionsList (main list): All features work
 - [ ] ActiveSessionsGroup (compact): All features work
 - [ ] Context menus identical between views
@@ -78,6 +88,7 @@ This document outlines the testing procedures for the newly implemented session 
 ## Implementation Details
 
 ### Files Modified
+
 1. `/sources/components/ContextMenu.tsx`
    - Added keyboard navigation support
    - Added keyboard shortcut display
@@ -93,6 +104,7 @@ This document outlines the testing procedures for the newly implemented session 
    - Added accessibility support
 
 ### Key Features
+
 - Platform-specific keyboard shortcuts display
 - Auto-positioning context menu
 - Keyboard navigation in context menu
@@ -101,11 +113,13 @@ This document outlines the testing procedures for the newly implemented session 
 - Native gesture handling
 
 ## Known Limitations
+
 - Export functionality shows placeholder message
 - Session duplication doesn't copy messages (by design)
 - Some keyboard shortcuts may conflict with browser shortcuts
 
 ## Browser Compatibility
+
 - Modern browsers with ES2018+ support
 - Tested keyboard events work in Chrome, Firefox, Safari
 - Context menu positioning uses modern CSS

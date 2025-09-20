@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 
 /**
  * Typography system for Happy Coder app
@@ -31,90 +31,86 @@ import { Platform } from "react-native";
 
 // Font family constants
 export const FontFamilies = {
-	// IBM Plex Sans (default typography)
-	default: {
-		regular: "IBMPlexSans-Regular",
-		italic: "IBMPlexSans-Italic",
-		semiBold: "IBMPlexSans-SemiBold",
-	},
+  // IBM Plex Sans (default typography)
+  default: {
+    regular: 'IBMPlexSans-Regular',
+    italic: 'IBMPlexSans-Italic',
+    semiBold: 'IBMPlexSans-SemiBold',
+  },
 
-	// IBM Plex Mono (default monospace)
-	mono: {
-		regular: "IBMPlexMono-Regular",
-		italic: "IBMPlexMono-Italic",
-		semiBold: "IBMPlexMono-SemiBold",
-	},
+  // IBM Plex Mono (default monospace)
+  mono: {
+    regular: 'IBMPlexMono-Regular',
+    italic: 'IBMPlexMono-Italic',
+    semiBold: 'IBMPlexMono-SemiBold',
+  },
 
-	// Bricolage Grotesque (logo/special use only)
-	logo: {
-		bold: "BricolageGrotesque-Bold",
-	},
+  // Bricolage Grotesque (logo/special use only)
+  logo: {
+    bold: 'BricolageGrotesque-Bold',
+  },
 
-	// Legacy fonts (keep for backward compatibility)
-	legacy: {
-		spaceMono: "SpaceMono",
-		systemMono: Platform.OS === "ios" ? "Menlo" : "monospace",
-	},
+  // Legacy fonts (keep for backward compatibility)
+  legacy: {
+    spaceMono: 'SpaceMono',
+    systemMono: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
 };
 
 // Helper functions for easy access to font families
-export const getDefaultFont = (
-	weight: "regular" | "italic" | "semiBold" = "regular",
-) => {
-	return FontFamilies.default[weight];
+export const getDefaultFont = (weight: 'regular' | 'italic' | 'semiBold' = 'regular') => {
+  return FontFamilies.default[weight];
 };
 
-export const getMonoFont = (
-	weight: "regular" | "italic" | "semiBold" = "regular",
-) => {
-	return FontFamilies.mono[weight];
+export const getMonoFont = (weight: 'regular' | 'italic' | 'semiBold' = 'regular') => {
+  return FontFamilies.mono[weight];
 };
 
 export const getLogoFont = () => {
-	return FontFamilies.logo.bold;
+  return FontFamilies.logo.bold;
 };
 
 // Font weight mappings for the font families
 export const FontWeights = {
-	regular: "400",
-	semiBold: "600",
-	bold: "700",
+  regular: '400',
+  semiBold: '600',
+  bold: '700',
 } as const;
 
 // Style utilities for easy inline usage
 export const Typography = {
-	// Default font styles (IBM Plex Sans)
-	default: (weight: "regular" | "italic" | "semiBold" = "regular") => ({
-		fontFamily: getDefaultFont(weight),
-	}),
+  // Default font styles (IBM Plex Sans)
+  default: (weight: 'regular' | 'italic' | 'semiBold' = 'regular') => ({
+    fontFamily: getDefaultFont(weight),
+  }),
 
-	// Monospace font styles (IBM Plex Mono)
-	mono: (weight: "regular" | "italic" | "semiBold" = "regular") => ({
-		fontFamily: getMonoFont(weight),
-	}),
+  // Monospace font styles (IBM Plex Mono)
+  mono: (weight: 'regular' | 'italic' | 'semiBold' = 'regular') => ({
+    fontFamily: getMonoFont(weight),
+  }),
 
-	// Logo font style (Bricolage Grotesque)
-	logo: () => ({
-		fontFamily: getLogoFont(),
-	}),
+  // Logo font style (Bricolage Grotesque)
+  logo: () => ({
+    fontFamily: getLogoFont(),
+  }),
 
-	// Header text style
-	header: () => ({
-		fontFamily: getDefaultFont("semiBold"),
-	}),
+  // Header text style
+  header: () => ({
+    fontFamily: getDefaultFont('semiBold'),
+  }),
 
-	// Body text style
-	body: () => ({
-		fontFamily: getDefaultFont("regular"),
-	}),
+  // Body text style
+  body: () => ({
+    fontFamily: getDefaultFont('regular'),
+  }),
 
-	// Legacy font styles (for backward compatibility)
-	legacy: {
-		spaceMono: () => ({
-			fontFamily: FontFamilies.legacy.spaceMono,
-		}),
-		systemMono: () => ({
-			fontFamily: FontFamilies.legacy.systemMono,
-		}),
-	},
+  // Legacy font styles (for backward compatibility)
+  legacy: {
+    spaceMono: () => ({
+      fontFamily: FontFamilies.legacy.spaceMono,
+    }),
+    systemMono: () => ({
+      fontFamily: FontFamilies.legacy.systemMono,
+    }),
+  },
 };

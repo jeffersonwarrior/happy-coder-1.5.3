@@ -4,23 +4,25 @@
 
 We currently support security updates for the following versions of Happy Coder:
 
-| Version | Supported          | Status |
-| ------- | ------------------ | ------ |
+| Version | Supported          | Status          |
+| ------- | ------------------ | --------------- |
 | 1.5.x   | :white_check_mark: | Current Release |
-| 1.4.x   | :white_check_mark: | LTS Support |
-| < 1.4   | :x:                | End of Life |
+| 1.4.x   | :white_check_mark: | LTS Support     |
+| < 1.4   | :x:                | End of Life     |
 
 ## Reporting a Vulnerability
 
 We take security seriously. If you discover a security vulnerability, please report it responsibly:
 
 ### For Critical Security Issues:
+
 - **Do NOT** create a public GitHub issue
 - **Email**: security@happy.engineering (primary contact)
 - **GitHub**: Contact [@jeffersonwarrior](https://github.com/jeffersonwarrior) directly via private message
 - **Include**: Detailed reproduction steps, impact assessment, and affected versions
 
 ### For Non-Critical Issues:
+
 - Create a GitHub issue with the `security` label
 - Use the security issue template if available
 - Provide clear description and reproduction steps
@@ -30,12 +32,14 @@ We take security seriously. If you discover a security vulnerability, please rep
 Happy Coder implements multiple layers of security:
 
 ### End-to-End Encryption
+
 - **Algorithm**: TweetNaCl (same encryption as Signal)
 - **Implementation**: All Claude Code conversations encrypted on-device
 - **Zero-Knowledge**: Server cannot decrypt your data
 - **Key Management**: Encryption keys never leave your devices
 
 ### Infrastructure Security
+
 - **Automated Security Scanning**:
   - TruffleHog OSS for secret detection
   - GitLeaks for credential scanning
@@ -51,11 +55,13 @@ Happy Coder implements multiple layers of security:
   - Automated testing
 
 ### Authentication & Authorization
+
 - **QR Code Pairing**: Secure device-to-device authentication
 - **Token Security**: GitHub tokens and API keys stored securely
 - **Session Management**: Encrypted session state with automatic expiration
 
 ### Data Protection
+
 - **Local Storage**: Sensitive data encrypted at rest
 - **Network Transit**: All communications over HTTPS/WSS
 - **No Data Collection**: Zero telemetry, no tracking
@@ -63,16 +69,17 @@ Happy Coder implements multiple layers of security:
 
 ## Response Timeline
 
-| Severity Level | Response Time | Patch Timeline |
-|---------------|---------------|----------------|
-| **Critical** (RCE, Data Breach) | 24 hours | 7 days |
-| **High** (Auth Bypass, XSS) | 72 hours | 14 days |
-| **Medium** (Info Disclosure) | 1 week | Next release |
-| **Low** (Minor Issues) | 2 weeks | Future release |
+| Severity Level                  | Response Time | Patch Timeline |
+| ------------------------------- | ------------- | -------------- |
+| **Critical** (RCE, Data Breach) | 24 hours      | 7 days         |
+| **High** (Auth Bypass, XSS)     | 72 hours      | 14 days        |
+| **Medium** (Info Disclosure)    | 1 week        | Next release   |
+| **Low** (Minor Issues)          | 2 weeks       | Future release |
 
 ## Security Best Practices
 
 ### For Users:
+
 - **Keep Updated**: Always use the latest version
 - **Secure Tokens**: Store GitHub tokens securely, rotate regularly
 - **Strong Authentication**: Enable 2FA on connected accounts
@@ -80,6 +87,7 @@ Happy Coder implements multiple layers of security:
 - **Review Permissions**: Regularly audit connected services
 
 ### For Developers:
+
 - **Secret Management**: Never commit secrets, API keys, or credentials
 - **Environment Variables**: Use `.env` files for sensitive configuration
 - **Dependency Security**: Keep dependencies updated, review security advisories
@@ -89,7 +97,9 @@ Happy Coder implements multiple layers of security:
 ## Security Architecture
 
 ### Threat Model
+
 Happy Coder is designed to protect against:
+
 - **Man-in-the-middle attacks**: End-to-end encryption
 - **Server-side data breaches**: Zero-knowledge architecture
 - **Credential theft**: Secure token storage and rotation
@@ -97,6 +107,7 @@ Happy Coder is designed to protect against:
 - **Supply chain attacks**: Dependency scanning and verification
 
 ### Trust Boundaries
+
 - **Client-Side**: Trusted (your devices)
 - **Happy Server**: Semi-trusted (encrypted data only)
 - **Network**: Untrusted (encrypted in transit)
@@ -129,6 +140,7 @@ In case of a security incident:
 ## Compliance & Standards
 
 Happy Coder follows security best practices including:
+
 - **OWASP Mobile Security**: Mobile application security guidelines
 - **NIST Cybersecurity Framework**: Risk management practices
 - **Privacy by Design**: Built-in privacy protection
@@ -146,12 +158,14 @@ We continuously monitor and secure our dependency chain:
 ## Encryption Details
 
 ### Key Exchange
+
 - **Algorithm**: Curve25519 (ECDH)
 - **Implementation**: libsodium/TweetNaCl
 - **Key Size**: 256-bit keys
 - **Perfect Forward Secrecy**: New keys for each session
 
 ### Message Encryption
+
 - **Algorithm**: XSalsa20 stream cipher
 - **Authentication**: Poly1305 MAC
 - **Nonce**: 192-bit random nonce per message
@@ -174,4 +188,4 @@ We thank the security research community for responsible disclosure and helping 
 **Version**: 1.5.2
 **Next Review**: December 2025
 
-*This security policy is regularly reviewed and updated. For the most current version, please check the main branch of this repository.*
+_This security policy is regularly reviewed and updated. For the most current version, please check the main branch of this repository._

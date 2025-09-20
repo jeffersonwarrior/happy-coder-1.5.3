@@ -1,0 +1,17 @@
+
+Please analyze and optimize this React Native Expo project for performance:
+
+1. Review component rendering patterns
+2. Check for unnecessary re-renders
+3. Optimize imports and bundle size
+4. Improve state management efficiency
+5. Add proper memoization where needed
+
+Focus on:
+- React.memo for components
+- useCallback/useMemo for expensive operations
+- Proper dependency arrays
+- Import optimization
+- Image optimization
+
+Apply optimizations while maintaining functionality.

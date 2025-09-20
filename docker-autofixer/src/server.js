@@ -96,7 +96,11 @@ class AutoFixer {
         return { success: true, jobId };
       } else {
         logger.error(`Auto-fix job ${jobId} failed validation`);
-        return { success: false, reason: 'Validation failed', details: { compileResults, fixResults } };
+        return {
+          success: false,
+          reason: 'Validation failed',
+          details: { compileResults, fixResults },
+        };
       }
     } catch (error) {
       logger.error(`Auto-fix job ${jobId} failed:`, error);
